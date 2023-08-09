@@ -6,14 +6,23 @@
 //  Copyright © 2016 Roy Marmelstein. All rights reserved.
 //
 
+#if canImport(ObjectiveC)
 @testable import PhoneNumberKit
 import XCTest
 
-import PhoneNumberKit
-
 /// Testing partial formatter. Goal is to replicate formatting behaviour of Apple's dialer.
-class PartialFormatterTests: XCTestCase {
-    let phoneNumberKit = PhoneNumberKit()
+final class PartialFormatterTests: XCTestCase {
+    private var phoneNumberKit: PhoneNumberKit!
+
+    override func setUp() {
+        super.setUp()
+        phoneNumberKit = PhoneNumberKit()
+    }
+
+    override func tearDown() {
+        phoneNumberKit = nil
+        super.tearDown()
+    }
 
     // +33689555555
     func testFrenchNumberFromFrenchRegion() {
@@ -105,7 +114,7 @@ class PartialFormatterTests: XCTestCase {
         var testNumber = "+"
         XCTAssertEqual(partialFormatter.formatPartial(testNumber), "+")
         testNumber = "+3"
-        XCTAssertEqual(partialFormatter.formatPartial(testNumber), "+3")
+        XCTAssertEqual(partialFormatter.formatPartial(testNumber), "+(3")
         testNumber = "+33"
         XCTAssertEqual(partialFormatter.formatPartial(testNumber), "+33")
         testNumber = "+336"
@@ -137,7 +146,7 @@ class PartialFormatterTests: XCTestCase {
         testNumber = "011"
         XCTAssertEqual(partialFormatter.formatPartial(testNumber), "011")
         testNumber = "0113"
-        XCTAssertEqual(partialFormatter.formatPartial(testNumber), "011 3")
+        XCTAssertEqual(partialFormatter.formatPartial(testNumber), "011 (3")
         testNumber = "01133"
         XCTAssertEqual(partialFormatter.formatPartial(testNumber), "011 33")
         testNumber = "011336"
@@ -172,7 +181,7 @@ class PartialFormatterTests: XCTestCase {
         var testNumber = "+"
         XCTAssertEqual(partialFormatter.formatPartial(testNumber), "+")
         testNumber = "+3"
-        XCTAssertEqual(partialFormatter.formatPartial(testNumber), "+3")
+        XCTAssertEqual(partialFormatter.formatPartial(testNumber), "+(3")
         testNumber = "+39"
         XCTAssertEqual(partialFormatter.formatPartial(testNumber), "+39")
         testNumber = "+390"
@@ -595,3 +604,4 @@ class PartialFormatterTests: XCTestCase {
     }
     
 }
+#endif
